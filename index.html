@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wishlist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <span class="brand">Monkeynovios<span class="brand-dot">.</span></span>
+      <nav class="view-switch" id="viewSwitch">
+        <button type="button" class="view-tab active" data-view="wishlist">Wishlist</button>
+        <button type="button" class="view-tab" data-view="comprados">Comprados</button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1 class="hero-title">Lo que nos gustar&iacute;a<br>recibir</h1>
+    <p class="hero-sub">Actualizado por los dos, en tiempo real.</p>
+  </section>
+
+  <nav class="person-tabs" id="personTabs">
+    <!-- generado por JS -->
+  </nav>
+
+  <div class="filter-row">
+    <div class="price-filters" id="priceFilters">
+      <!-- generado por JS -->
+    </div>
+    <button class="add-fab" id="addFab">
+      <span>+</span> A&ntilde;adir art&iacute;culo
+    </button>
+  </div>
+
+  <main class="grid" id="grid">
+    <!-- generado por JS -->
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <form class="modal" id="itemForm" autocomplete="off">
+      <div class="modal-head">
+        <h2 id="modalTitle">Nuevo art&iacute;culo</h2>
+        <button type="button" class="icon-btn" id="closeModal" aria-label="Cerrar">&times;</button>
+      </div>
+
+      <input type="hidden" id="itemId">
+
+      <label class="field">
+        <span>Para qui&eacute;n</span>
+        <select id="fPersona" required></select>
+      </label>
+
+      <label class="field">
+        <span>Nombre del art&iacute;culo</span>
+        <input type="text" id="fNombre" required placeholder="Ej. Sudadera North Face talla M">
+      </label>
+
+      <label class="field">
+        <span>Precio (&euro;)</span>
+        <input type="number" id="fPrecio" required min="0" step="0.01" placeholder="Ej. 45.90">
+      </label>
+
+      <label class="field">
+        <span>Link de compra</span>
+        <input type="url" id="fLink" placeholder="https://...">
+      </label>
+
+      <label class="field">
+        <span>Imagen (link directo a la foto)</span>
+        <input type="url" id="fImagen" placeholder="https://... .jpg">
+      </label>
+
+      <label class="field">
+        <span>Detalles &mdash; talla, modelo, color...</span>
+        <textarea id="fDetalles" rows="2" placeholder="Talla M, color negro, modelo 2024"></textarea>
+      </label>
+
+      <label class="field">
+        <span>Por qu&eacute; este regalo</span>
+        <textarea id="fMotivo" rows="2" placeholder="Se le ha roto el suyo / le encanta esta marca / lo necesita para..."></textarea>
+      </label>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="deleteBtn" style="display:none;">Eliminar</button>
+        <div class="modal-actions-right">
+          <button type="button" class="btn btn-ghost" id="cancelBtn">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <script type="module" src="firebase-config.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
