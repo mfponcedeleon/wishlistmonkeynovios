@@ -80,6 +80,7 @@ function buildPersonTabs() {
     btn.addEventListener("click", () => {
       currentPerson = btn.dataset.person;
       currentPriceFilter = "todo";
+      personTabsEl.querySelectorAll(".person-tab").forEach((b) => b.classList.toggle("active", b === btn));
       render();
     });
   });
@@ -175,7 +176,7 @@ function renderCard(item) {
   card.innerHTML = `
     <div class="card-media ${hasImage ? "" : "placeholder"}">
       ${mediaContent}
-      ${currentPerson === "todos" ? `<span class="card-tag">${personLabel(item.persona)}</span>` : ""}
+      ${currentPerson === "todos" ? `<span class="card-tag tag-${item.persona}">${personLabel(item.persona)}</span>` : ""}
       <button class="card-check ${item.comprado ? "checked" : ""}" data-toggle="${item.id}" title="${item.comprado ? "Devolver a la wishlist" : "Marcar como comprado"}">&#10003;</button>
     </div>
     <p class="card-price">${money(item.precio)}</p>
@@ -234,12 +235,20 @@ function openModal(item = {}) {
 
   modalTitle.textContent = item.id ? "Editar art\u00edculo" : "Nuevo art\u00edculo";
   deleteBtn.style.display = item.id ? "inline-flex" : "none";
+  deleteBtn.classList.remove("confirming");
+  deleteBtn.textContent = "Eliminar";
+  clearTimeout(deleteBtn._resetTimer);
 
   backdrop.classList.add("open");
   document.getElementById("fNombre").focus();
 }
 
-function closeModal() { backdrop.classList.remove("open"); }
+function closeModal() {
+  backdrop.classList.remove("open");
+  deleteBtn.classList.remove("confirming");
+  deleteBtn.textContent = "Eliminar";
+  clearTimeout(deleteBtn._resetTimer);
+}
 
 addFab.addEventListener("click", () => openModal());
 document.getElementById("closeModal").addEventListener("click", closeModal);
@@ -279,10 +288,30 @@ form.addEventListener("submit", async (e) => {
 deleteBtn.addEventListener("click", async () => {
   const id = document.getElementById("itemId").value;
   if (!id) return;
-  if (!confirm("\u00bfEliminar este art\u00edculo?")) return;
-  await deleteDoc(doc(db, "articulos", id));
-  showToast("Art\u00edculo eliminado");
-  closeModal();
+
+  if (!deleteBtn.classList.contains("confirming")) {
+    deleteBtn.classList.add("confirming");
+    deleteBtn.textContent = "\u00bfSeguro? Pulsa otra vez";
+    clearTimeout(deleteBtn._resetTimer);
+    deleteBtn._resetTimer = setTimeout(() => {
+      deleteBtn.classList.remove("confirming");
+      deleteBtn.textContent = "Eliminar";
+    }, 3500);
+    return;
+  }
+
+  clearTimeout(deleteBtn._resetTimer);
+  deleteBtn.classList.remove("confirming");
+  deleteBtn.textContent = "Eliminar";
+
+  try {
+    await deleteDoc(doc(db, "articulos", id));
+    showToast("Art\u00edculo eliminado");
+    closeModal();
+  } catch (err) {
+    console.error(err);
+    showToast("No se pudo eliminar. Revisa la conexi\u00f3n con Firebase.");
+  }
 });
 
 // ---------------------------------------------------------
